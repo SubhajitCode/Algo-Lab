@@ -7,6 +7,8 @@ struct link{
 typedef struct link link;
 void print(link* head)
 {
+    printf("Printing -------------------------------------------------\n");  
+
     int i;
     link *list=head;
     while(1)
@@ -63,6 +65,7 @@ void inverse(link *head)
         list->next=temp;
         list=temp2;
         temp=temp->next;
+        printf("%d \t",temp->data);
         if(list==NULL)
         {
             head=temp;
