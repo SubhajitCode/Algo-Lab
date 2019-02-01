@@ -6,7 +6,7 @@ struct link{
 };
 typedef struct link link;
 typedef struct link node;
-void printlink(link* head)
+void printlink(link* head,link *tail)
 {
     printf("Printing -------------------------------------------------\n");  
 
@@ -15,9 +15,9 @@ void printlink(link* head)
     while(1)
     {
         printf("%d\n",list->data);
-        list=list->next;
-        if (list==NULL)
+        if (list==tail)
             break;
+        list=list->next;
     }
     printf("\n");
 	printf("Printing --------------------Ended-----------------------------\n");  
@@ -30,7 +30,7 @@ node* insertLink(link *top,int n)
 	return list;
 }
 
-node* delete(link *head)
+node* deleteLink(link *head)
 {
 	link *list=head;
     link *temp=list->next;
@@ -39,52 +39,54 @@ node* delete(link *head)
 
 }
 
-struct mystack
+struct myQueue
 {
 	node *top;
+    node *bottom;
 };
 
-typedef struct mystack stk;
-enQueue(struct mystack* stack,int n)
+typedef struct myQueue myQueue;
+enQueue(myQueue* mq,int n)
 {
 
-	stack->top=insertLink(stack->top,n);
+	mq->top=insertLink(mq->top,n);
 	
 }
-int deQueue(struct mystack* stack)
+int deQueue(myQueue* mq)
 {
-	int temp=stack->top->data;
-	stack->top=delete(stack->top);
+	int temp=mq->bottom->data;
+	mq->bottom=deleteLink(mq->bottom);
 	return temp;
 	
 }
-int frontQueue(struct mystack* stack)
+int frontQueue(myQueue* mq)
 {
-	return stack->top->next->data;
+	return mq->bottom->data;
 
 }
-int printQueue(struct mystack* stack)
+int printQueue(myQueue* mq)
 {
 	printf("-----------------------------------------Printing Stack----------------------------------------------------\n");
-		printlink(stack->top->next);
+		printlink(mq->top,mq->bottom);
 	printf("-----------------------------------------Printing Stack----------------------------------------------------\n");
 	
 
 }
 int main()
 {
-	struct mystack stack;
+	struct myQueue mq;
 	int i;
-	stack.top->next=NULL;
+	mq.top=mq.bottom;
+    //mq.bottom->next=NULL;
 	for(i=0;i<10;i++)
 	{
-		pushStack(&stack,i);
+		enQueue(&mq,i);
 	}
-	printStack(&stack);
+	printQueue(&mq);
 	
-	popStack(&stack);
-	printStack(&stack);
-	printf("Top is -----------:%d\n",topStack(&stack));
+	deQueue(&mq);
+	printQueue(&mq);
+	printf("Top is -----------:%d\n",frontQueue(&mq));
 
 return 0;
 }
