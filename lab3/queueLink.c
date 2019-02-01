@@ -45,25 +45,25 @@ struct mystack
 };
 
 typedef struct mystack stk;
-pushStack(struct mystack* stack,int n)
+enQueue(struct mystack* stack,int n)
 {
 
 	stack->top=insertLink(stack->top,n);
 	
 }
-int popStack(struct mystack* stack)
+int deQueue(struct mystack* stack)
 {
 	int temp=stack->top->data;
 	stack->top=delete(stack->top);
 	return temp;
 	
 }
-int topStack(struct mystack* stack)
+int frontQueue(struct mystack* stack)
 {
 	return stack->top->next->data;
 
 }
-int printStack(struct mystack* stack)
+int printQueue(struct mystack* stack)
 {
 	printf("-----------------------------------------Printing Stack----------------------------------------------------\n");
 		printlink(stack->top->next);
