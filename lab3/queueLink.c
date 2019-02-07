@@ -1,92 +1,122 @@
 #include<stdio.h>
-
-struct link{
+#include<stdlib.h>
+struct node{
     int data;
-    struct link *next;
+    struct node *next;
+	//Structior of node in Linklist
 };
-typedef struct link link;
-typedef struct link node;
-void printlink(link* head,link *tail)
+typedef struct node node;
+struct myQueue
+{
+	node* front;
+   	node* rear;
+};
+
+typedef struct myQueue myQueue;
+void printLinkedList(node* front,node *rear)
 {
     printf("Printing -------------------------------------------------\n");  
 
     int i;
-    link *list=head;
+    node *link=front;//start from rear
     while(1)
     {
-        printf("%d\n",list->data);
-        if (list==tail)
-            break;
-        list=list->next;
+        printf("%d\n",link->data);
+        if (link==rear)
+            break;//end at front
+        link=link->next;
     }
     printf("\n");
 	printf("Printing --------------------Ended-----------------------------\n");  
 }
-node* insertLink(link *top,int n)
+node* insertLinkAtRear(node *rear,int n)
 {
-	link *list=malloc(sizeof(link));
-	list->next=top;
-	top->data=n;
-	return list;
+	//insert link at rear
+	node *link=malloc(sizeof(node));
+	link->data=n;
+	rear->next=link;
+	return link;
 }
 
-node* deleteLink(link *head)
+node* deleteLinkFromFront(node *front)
 {
-	link *list=head;
-    link *temp=list->next;
-    list->next=temp->next;
-	return list;
+	//delete from front
+    node *temp=front->next;
+    free(front);
+	return temp;
 
 }
 
-struct myQueue
-{
-	node *top;
-    node *bottom;
-};
 
-typedef struct myQueue myQueue;
-enQueue(myQueue* mq,int n)
+void enQueue(myQueue* mq,int n)
 {
-
-	mq->top=insertLink(mq->top,n);
+	if (mq->rear==NULL) {
+			node *temp=(node*)malloc(sizeof(node));
+			temp->data=n;
+			temp->next=NULL;
+			mq->rear=temp;
+			mq->front=temp;
+			mq->front->next=temp;
+	}
+	else
+	{
+		mq->rear=insertLinkAtRear(mq->rear,n);
+	}	
 	
 }
 int deQueue(myQueue* mq)
 {
-	int temp=mq->bottom->data;
-	mq->bottom=deleteLink(mq->bottom);
-	return temp;
+	if(mq->front==NULL)
+	{
+		printf("Sorry Que is Empty\n");
+		return 0;
+
+	}
+	else
+	{
+			int data=mq->front->data;
+		mq->front=deleteLinkFromFront(mq->front);
+		return(data);
+	}
 	
 }
 int frontQueue(myQueue* mq)
 {
-	return mq->bottom->data;
+	if(mq->front==NULL)
+	{
+		printf("Sorry Que is Empty\n");
+		return 0;
+
+	}
+	
+	return mq->front->data;
 
 }
 int printQueue(myQueue* mq)
 {
 	printf("-----------------------------------------Printing Stack----------------------------------------------------\n");
-		printlink(mq->top,mq->bottom);
+		printLinkedList(mq->front,mq->rear);
 	printf("-----------------------------------------Printing Stack----------------------------------------------------\n");
 	
 
-}
+} 
 int main()
 {
-	struct myQueue mq;
+	 myQueue *mq=(myQueue*)malloc(sizeof(myQueue));
+	 mq->front=NULL;
+	 mq->rear=NULL;
 	int i;
-	mq.top=mq.bottom;
-    //mq.bottom->next=NULL;
+
 	for(i=0;i<10;i++)
 	{
-		enQueue(&mq,i);
+		enQueue(mq,i);
 	}
-	printQueue(&mq);
+	printQueue(mq);
 	
-	deQueue(&mq);
-	printQueue(&mq);
-	printf("Top is -----------:%d\n",frontQueue(&mq));
+	deQueue(mq);
+	//deQueue(mq);
+	printQueue(mq);
+	printf("Front is -----------:%d\n",frontQueue(mq));
 
 return 0;
 }
