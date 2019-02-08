@@ -1,72 +1,71 @@
 #include<stdio.h>
-
+#include<stdlib.h>
 struct link{
+	//LinkList Node
     int data;
-    struct link *next;
+    struct link *next;//ponting at next node 
 };
-typedef struct link link;
 typedef struct link node;
-void printlink(link* head)
+void printLinkList(node* head)
 {
-    printf("Printing -------------------------------------------------\n");  
-
+//Prints the Whole Linklist
     int i;
-    link *list=head;
+    node *link=head;
     while(1)
     {
-        printf("%d\n",list->data);
-        list=list->next;
-        if (list==NULL)
+        printf("%d\n",link->data);
+        link=link->next;
+        if (link==NULL)
             break;
     }
     printf("\n");
-	printf("Printing --------------------Ended-----------------------------\n");  
 }
-node* insertLink(link *top,int n)
+node* insertNode(node *top,int n)
 {
-	link *list=malloc(sizeof(link));
-	list->next=top;
-	top->data=n;
-	return list;
+	//alocate mem new Node
+	node *link=(node*)malloc(sizeof(node));
+	link->next=top;//connect the link with the prev top
+	link->data=n; //insert Data
+	return link; //return the now top
 }
 
-node* delete(link *head)
+node* deleteNode(node *head)
 {
-	link *list=head;
-    link *temp=list->next;
-    list->next=temp->next;
-	return list;
+	node *tmp=head->next;//temporarily save the next node
+	free(head);//dealocate the mem from heap
+	return(tmp);//return now top after poping the top
 
 }
 
 struct mystack
 {
-	node *top;
+	node *top;//Stack by link list
 };
 
 typedef struct mystack stk;
-pushStack(struct mystack* stack,int n)
+void pushStack(struct mystack* stack,int n)
 {
 
-	stack->top=insertLink(stack->top,n);
+	stack->top=insertNode(stack->top,n);//Insert new Node at top
 	
 }
 int popStack(struct mystack* stack)
 {
-	int temp=stack->top->data;
-	stack->top=delete(stack->top);
-	return temp;
+	int temp=stack->top->data; //Save the Prev top
+	stack->top=deleteNode(stack->top);//Delete the top
+	return temp;//Return the prev top
 	
 }
 int topStack(struct mystack* stack)
 {
-	return stack->top->next->data;
+	return stack->top->data;//Return the top of the stack
 
 }
-int printStack(struct mystack* stack)
+void printStack(struct mystack* stack)
 {
+	//Wrapper arount Printing List
 	printf("-----------------------------------------Printing Stack----------------------------------------------------\n");
-		printlink(stack->top->next);
+		printLinkList(stack->top);
 	printf("-----------------------------------------Printing Stack----------------------------------------------------\n");
 	
 
@@ -75,7 +74,7 @@ int main()
 {
 	struct mystack stack;
 	int i;
-	stack.top->next=NULL;
+	stack.top=NULL;
 	for(i=0;i<10;i++)
 	{
 		pushStack(&stack,i);
