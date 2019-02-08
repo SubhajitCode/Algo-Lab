@@ -2,97 +2,97 @@
 #include<stdlib.h>
 struct node
 {
-    struct node *left;
-    struct node *right;
-    int data;
-    int visted;
+	struct node *left;
+	struct node *right;
+	int data;
+	int visted;
 };
+int i=0;
 
-typedef struct node bstnode;
-void bstTravel()
-{
-}
 
 void insertBSTNode(bstnode *bstRoot,int data)
 {
- 
-    bstnode *bstNode=(bstnode*)malloc(sizeof(bstnode));
-    bstNode->data=data;
-    bstNode->left=NULL;
-    bstNode->right=NULL;
-    bstNode->visted=0;
-    bstnode *currentnode = bstRoot;
-    while((currentnode->left!=NULL)&&(currentnode->right!=NULL))
-    {
-        if (bstNode->data >= currentnode->data)
-        {
-            currentnode = currentnode->right;
-        }
-        else
-        {
-            currentnode = currentnode->left;
-        }
-    }
-        if (bstNode->data >= currentnode->data)
-        {
-             currentnode->right=bstNode;
-        }
-        else
-        {
-            currentnode->left=bstNode;
-        }
+
+	bstnode *bstNode=(bstnode*)malloc(sizeof(bstnode));
+	bstNode->data=data;
+	bstNode->left=NULL;
+	bstNode->right=NULL;
+	bstNode->visted=0;
+	bstnode *currentnode = bstRoot;
+	while(1)
+	{
+		if (bstNode->data >= currentnode->data)
+		{
+			if(currentnode->right==NULL)
+			{
+				currentnode->right=bstNode;
+				break;
+			}
+			else
+			{
+				currentnode = currentnode->right;
+			}
+		}
+		else
+		{
+			if(currentnode->left==NULL)
+			{
+				currentnode->left=bstNode;
+				break;
+			}
+			else
+			{
+				currentnode = currentnode->left;
+			}
+		}
+	}
+
 
 }
 void printBst(bstnode *root)
 {
-    int level;
+	int level;
 
 }
-int findMinBst(bstnode *root)
+void inOrderTraverse(bstnode *root,int arr[])
 {
-    bstnode *currentNode=root;
-    while(currentNode->left!=NULL)
-    {
-        if (currentNode->visted==1) {
-            //go right
-            currentNode=currentNode->right;
-        }
-        else
-        {
-            currentNode=currentNode->left; 
-            /* Go Left */
-        }
-        
-              
-    }
-    int min=currentNode->data;
-    currentNode->visted=1;  
-    return min; 
+	if (root==NULL) {
+		return;
+	}
+
+	inOrderTraverse(root->left,arr);
+	arr[i]=root->data;
+	i++;
+	//printf("%d  i%d  ",root->data,i);
+	inOrderTraverse(root->right,arr);
 
 }
 
-main()
+void main()
 {
-    bstnode *root = (bstnode*)malloc(sizeof(bstnode));
-    root->data=100;
-    root->left=NULL;
-    root->right=NULL;
-    root->visted=0;
-    int count =20;
-    int i;
-    for(i = 0; i < count-1; i++)
-    {
-        int data=rand()%count;
-        insertBSTNode(root,data);
-        printf("%d\t",data);
-    }
-    printf("\n----------------Insertion compleate-----------------\n");
-    for(i = 0; i < count; i++)
-    {
-        printf("%d\t",findMinBst(root));
-    }
-    printf("\n----------------Finding compleate-----------------\n");
-    printf("\n%d\n",root->left->left->data);
-    
+	bstnode *root = (bstnode*)malloc(sizeof(bstnode));
+	root->data=100;
+	root->left=NULL;
+	root->right=NULL;
+	root->visted=0;
+	int count =20;
+	int i;
+	for(i = 0; i < count-1; i++)
+	{
+		int data=rand()%count;
+		insertBSTNode(root,data);
+		printf("%d\t",data);
+	}
+	printf("\n----------------Insertion compleate-----------------\n");
+	int arr[count];
+	bstnode *copy=root;
+	inOrderTraverse(copy,arr);
+	for(i = 0; i < count; i++)
+	{
+		printf("%d\t",arr[i]);
+	}
+	printf("\n----------------Finding compleate-----------------\n");
+
+
 
 }

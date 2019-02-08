@@ -25,7 +25,7 @@ void print(link *head)
 void delete_next_node(link *node)
 {
     node->next = node->next->next;
-    // free(node->next);
+    free(node->next);
 }
 
 link *inverse(link *head)
