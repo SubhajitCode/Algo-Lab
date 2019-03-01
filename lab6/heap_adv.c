@@ -25,6 +25,29 @@ void heapify(int heap[],int pos)
 	}
 
 }
+void heapify_2(int heap[],int pos,int size)
+{
+	int child1=2*pos+1;
+	int child2=2*pos+2;
+	if(child1>size)
+		return;
+	
+		if(heap[child1]>heap[pos])
+		{
+			swap(&heap[pos],&heap[child1]);
+		}
+		if(heap[child2]>heap[pos])
+		{
+			swap(&heap[pos],&heap[child2]);
+			heapify_2(heap,child2,size);
+		}
+		else
+			
+			heapify_2(heap,child1,size);
+	
+	
+
+}
 int heap_Max(int heap[])
 {
 //return max element
@@ -32,6 +55,11 @@ int heap_Max(int heap[])
 	return ret;
 }
 
+void heap_Pop(int *heap[])
+{
+	int ret=*heap[0];
+	*heap=*(heap+1);
+}
 void print_heap(int heap[],int size)
 {
 	int no_rows=log(size)/log(2);
@@ -59,16 +87,20 @@ void swap(int *a,int *b)
 }
 void main()
 {
-	int size=20;
+	int size=10;
 	int heap[size];
-	int current_end=-1,i;
+	int i;
 	for(i=0;i<size;i++)
 	{
-		current_end=heap_Insert(heap,rand()%size,current_end);
+		heap[i]=rand()%10;
+		printf("%d ",heap[i]);
+
 	}
-
+	printf("\n");
+	for(i=0;i<size;i++)
+	{
+		heapify_2(heap,i,size);
+	}
 	print_heap(heap,size);
-	printf("\n max element is %d\n",heap_Max(heap));
-
 
 }
