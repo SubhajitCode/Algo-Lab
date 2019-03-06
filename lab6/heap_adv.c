@@ -29,28 +29,28 @@ void heapify_2(int heap[],int pos,int size)
 {
 	int child1=2*pos+1;
 	int child2=2*pos+2;
-	if(child1>size)
+	if(child1>=size)
 		return;
-	
-		if(heap[child1]>heap[pos])
-		{
-			swap(&heap[pos],&heap[child1]);
-		}
-		if(heap[child2]>heap[pos])
-		{
-			swap(&heap[pos],&heap[child2]);
-			heapify_2(heap,child2,size);
-		}
-		else
-			
-			heapify_2(heap,child1,size);
-	
-	
+	//find max
+	int temp,max;
+	if(heap[child1]>heap[child2])
+		max=child1;
+	else if(child2<size)
+		max=child2;
+	else
+		max=pos;
+	if(heap[max]>heap[pos])
+	{
+		swap(&heap[pos],&heap[max]);
+		heapify_2(heap,max,size);
+//		heapify_2(heap,child2,size);
+	}
+
 
 }
 int heap_Max(int heap[])
 {
-//return max element
+	//return max element
 	int ret=heap[0];
 	return ret;
 }
@@ -62,20 +62,24 @@ void heap_Pop(int *heap[])
 }
 void print_heap(int heap[],int size)
 {
-	int no_rows=log(size)/log(2);
-	int i,j,k=1,l=0;
+	int no_rows=log(size)/log(2)+1;
+	int i,j,k=1,l=0,m;
 	for(i=0;i<no_rows;i++)
 	{
-		for(j=0;j<no_rows-i;j++)
-		{
+		for(j=0;j<pow(2,(no_rows-i-1))-1;j++)
 			printf(" ");
-		}
-		for(j=0;j<k;j++)
+		for(m=0;m<k;m++)
 		{
-			printf("%d ",heap[l++]);
+			printf("%2d",heap[l++]);
+				if(l>=size)
+					break;
+			for(j=0;j<pow(2,(no_rows-i))-1;j++)
+			{
+				printf(" ");
+			}
 		}
-		k=k*2;
 		printf("\n");
+		k=k*2;
 	}
 }
 void swap(int *a,int *b)
@@ -87,19 +91,19 @@ void swap(int *a,int *b)
 }
 void main()
 {
-	int size=10;
+	int size=31;
 	int heap[size];
 	int i;
 	for(i=0;i<size;i++)
 	{
-		heap[i]=rand()%10;
+		heap[i]=rand()%31;
 		printf("%d ",heap[i]);
 
 	}
 	printf("\n");
 	for(i=0;i<size;i++)
 	{
-		heapify_2(heap,i,size);
+		heapify_2(heap,size-i-1,size);
 	}
 	print_heap(heap,size);
 
