@@ -7,6 +7,7 @@ struct Node{
     int weight;
     struct Node* next;
 };
+typedef struct Node node;
 struct Edge
 {
     int srcVertex;
@@ -14,9 +15,11 @@ struct Edge
     int weight;
    
 };
+typedef struct Edge Edge;
 struct heapNode{
     int Vertex;
     int key;
+    Edge edge;
 };
 typedef struct heapNode heapNode;
 struct Heap{    
@@ -24,9 +27,6 @@ struct Heap{
     heapNode** arr;
     int *pos;
 };
-
-typedef struct Node node;
-typedef struct Edge Edge;
 typedef struct Heap Heap;
 void swap(heapNode **a,heapNode **b)
 {
@@ -69,21 +69,22 @@ Edge newEdge(int src,int dest,int weight)
 }
 void heapify(Heap* heap,int pos)
 {
+
     int n=heap->size;
     int min_idx=pos;
     int left=2*pos+1;
     int right=2*pos+2;
-    if (right<n && heap->arr[right]->key<heap->arr[min_idx]->key) {
-        min_idx=right;
-    }
     if (left<n && heap->arr[left]->key<heap->arr[min_idx]->key) {
        min_idx=left;
     }
+    if (right<n && heap->arr[right]->key<heap->arr[min_idx]->key) {
+        min_idx=right;
+    }
     if (min_idx!=pos) {
         
-        swap(&heap->arr[min_idx],&heap->arr[pos]);
         heap->pos[heap->arr[min_idx]->Vertex]=pos;
         heap->pos[heap->arr[pos]->Vertex]=min_idx;
+        swap(&heap->arr[min_idx],&heap->arr[pos]);
         heapify(heap,min_idx);
     }
 }
@@ -98,26 +99,30 @@ void buildHeap(Heap* heap)
 }
 heapNode* extractMin(Heap* heap)
 {
+    if(heap->size==0)
+        return NULL;
     heapNode* min=heap->arr[0];
     int n=heap->size;
     heap->arr[0]=heap->arr[n-1];
-    heap->pos[heap->arr[0]->Vertex]=0;
+    heap->pos[heap->arr[n-1]->Vertex]=0;
     heap->pos[min->Vertex]=n-1;
     heap->size--;
     heapify(heap,0);
     return min;
 }
-void decreaseKey(Heap* heap,int Vertex,int key)
+void decreaseKey(Heap* heap,int Vertex,int key,Edge edge)
 {
     int i=heap->pos[Vertex];
     int parent_idx=(i-1)/2;
     heap->arr[i]->key=key;
-    while(i>=0&&heap->arr[i]->key<heap->arr[parent_idx]->key)
+    heap->arr[i]->edge=edge;
+    while(i>0&&heap->arr[i]->key<heap->arr[parent_idx]->key)
     {
         heap->pos[heap->arr[i]->Vertex]=parent_idx;
         heap->pos[heap->arr[parent_idx]->Vertex]=i;
         swap(&heap->arr[i],&heap->arr[parent_idx]);
         i=parent_idx;
+        parent_idx=(i-1)/2;
     }
 }
 bool isInHeap(Heap* heap,int v)
@@ -145,28 +150,45 @@ void printTree(Edge edge[],int n)
     }
 
 }
+void printArray(int arr[],int n)
+{
+    int i;
+    for(i=0;i<n;i++)
+    {
+        printf("%d  --%d\n",arr[i],i);
+    }
+}
 void primMST(node* vertex[],int n )
 {
-    Edge tree[n-1];
+    Edge tree[n];
+    int parent[n];
+    int key[n];
     int i;
     Heap* heap=newHeap(n);
     for( i = 0; i < n; i++)
     {
+        parent[i]=-1;
+        key[i]=__INT_MAX__;
         heap->arr[i]=newHeapNode(i,__INT_MAX__);
         heap->pos[i]=i;  
     }
     heap->arr[0]->key=0;
+    heap->pos[0]=0;
+    key[0]=0;
     i=0;int src=-1,dest=-1;
-    while(heap->size>0){
+    while(heap->size!=0){
         heapNode* minNode=extractMin(heap);
+        tree[i++]=minNode->edge;
         int u=minNode->Vertex;
         node* current_node=vertex[u]->next;
         while(current_node!=NULL){
             int v=current_node->vertexNum;
             if(isInHeap(heap,v)&&heap->arr[heap->pos[v]]->key>current_node->weight)
             {
-                    decreaseKey(heap,v,current_node->weight);
-                    tree[i++]=newEdge(u,v,current_node->weight);
+                    Edge edge=newEdge(u,v,current_node->weight);
+                    key[v]=current_node->weight;
+                    parent[v]=u;
+                    decreaseKey(heap,v,current_node->weight,edge);
             }
             current_node=current_node->next;
           
@@ -176,7 +198,8 @@ void primMST(node* vertex[],int n )
 
 
     }
-    printTree(tree,n-1);
+    printTree(tree,n);
+   printArray(parent,n);
     
 
 }
