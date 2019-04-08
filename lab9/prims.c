@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
+#include<math.h>
 
 struct Node{
     int vertexNum;
@@ -52,12 +53,18 @@ node* newNode(int weight,int vertexNum)
     tempNode->next=NULL;
     return tempNode;
 }
-void createEdge(node* vertex,int weight,int vertexNum)
+void createEdge(node* graph[],int src,int weight,int dest)
 {
+    node* vertex=graph[src];
     while(vertex->next!=NULL){
        vertex=vertex->next;
     }
-    vertex->next=newNode(weight,vertexNum);   
+    vertex->next=newNode(weight,dest); 
+    vertex=  graph[dest];
+     while(vertex->next!=NULL){
+       vertex=vertex->next;
+    }
+    vertex->next=newNode(weight,src);
 }
 Edge newEdge(int src,int dest,int weight)
 {
@@ -143,13 +150,48 @@ Heap* newHeap(int size)
 void printTree(Edge edge[],int n)
 {
     int i;
-    for(i=0;i<n;i++)
+    int sum=0;
+    for(i=1;i<n;i++)
     {
         printf("%d - %d\t ---%d\n",edge[i].srcVertex,edge[i].destVertex,edge[i].weight);
+        sum=sum+edge[i].weight;
 
     }
-
+ printf(" ----------Sum ofthe weight is ---%d\n",sum );
 }
+
+void print_heap(heapNode* heap[],int size)
+{
+    printf(" ----------heap start -------------\n");
+	int no_rows=log(size)/log(2)+1;
+	int i,j,k=1,l=0,m;
+	for(i=0;i<no_rows;i++)
+	{
+		for(j=0;j<pow(2,(no_rows-i-1))-1;j++)
+			printf(" ");
+		for(m=0;m<k;m++)
+		{
+            if (heap[l]->key>10) {
+                printf("%d.%c",heap[l]->Vertex,'M');
+            }
+            else
+            {
+                printf("%d.%d",heap[l]->Vertex,heap[l]->key);
+            }
+            l++;
+				if(l>=size)
+					break;
+			for(j=0;j<pow(2,(no_rows-i))-1;j++)
+			{
+				printf(" ");
+			}
+		}
+		printf("\n");
+		k=k*2;
+	}
+     printf(" ----------heap end -------------\n");
+}
+
 void printArray(int arr[],int n)
 {
     int i;
@@ -199,7 +241,7 @@ void primMST(node* vertex[],int n )
 
     }
     printTree(tree,n);
-   printArray(parent,n);
+   //printArray(parent,n);
     
 
 }
@@ -214,23 +256,22 @@ int main()
     {
         vertices[i]=newNode(i,0);//vertex Initialization
     }
-    createEdge(vertices[0],4,1);
-    createEdge(vertices[0],8,7);
-    createEdge(vertices[1],8,2);
-    createEdge(vertices[1],11,7);
-    createEdge(vertices[2],7,3);
-    createEdge(vertices[2],2,8);
-    createEdge(vertices[2],4,5);
-    createEdge(vertices[3],9,4);
-    createEdge(vertices[3],14,5);
-    createEdge(vertices[4],10,5);
-    createEdge(vertices[5],2,6);
-    createEdge(vertices[6],1,7);
-    createEdge(vertices[6],6,8);
-    createEdge(vertices[7],7,8);
+    createEdge(vertices,0,4,1);
+    createEdge(vertices,0,8,7);
+    createEdge(vertices,1,8,2);
+    createEdge(vertices,1,11,7);
+    createEdge(vertices,2,7,3);
+    createEdge(vertices,2,2,8);
+    createEdge(vertices,2,4,5);
+    createEdge(vertices,3,9,4);
+    createEdge(vertices,3,14,5);
+    createEdge(vertices,4,10,5);
+    createEdge(vertices,5,2,6);
+    createEdge(vertices,6,1,7);
+    createEdge(vertices,6,6,8);
+    createEdge(vertices,7,7,8);
 
     primMST(vertices,9);
-    printf("debug\n");
 
 return 0;
 }
