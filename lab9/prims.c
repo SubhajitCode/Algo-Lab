@@ -185,17 +185,28 @@ void primMST(node* vertex[],int n )
 
 int main()
 {
-    node* vertices[4];
+    node* vertices[9];
     int i;
-    for( i = 0; i < 4; i++)
+    for( i = 0; i < 9; i++)
     {
         vertices[i]=newNode(i,0);//vertex Initialization
     }
-    createEdge(vertices[0],2,1);
-    createEdge(vertices[1],2,2);
-    createEdge(vertices[0],1,2);
-    createEdge(vertices[2],3,3);
-    primMST(vertices,4);
+    createEdge(vertices[0],4,1);
+    createEdge(vertices[0],8,7);
+    createEdge(vertices[1],8,2);
+    createEdge(vertices[1],11,7);
+    createEdge(vertices[2],7,3);
+    createEdge(vertices[2],2,8);
+    createEdge(vertices[2],4,5);
+    createEdge(vertices[3],9,4);
+    createEdge(vertices[3],14,5);
+    createEdge(vertices[4],10,5);
+    createEdge(vertices[5],2,6);
+    createEdge(vertices[6],1,7);
+    createEdge(vertices[6],6,8);
+    createEdge(vertices[7],7,8);
+
+    primMST(vertices,9);
     printf("debug\n");
 
 return 0;
