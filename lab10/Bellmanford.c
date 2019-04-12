@@ -66,9 +66,9 @@ int main()
 {
     int graph[V][V] = {{0, 5, INF, 10},
                        {INF, 0, 3, INF},
-                       {INF, -2, 0, 1},
+                       {INF, 2, 0, 1},
                        {INF, INF, INF, 0}};
-    bellmanFord(graph,2);
+    bellmanFord(graph,0);
 
 return 0;
 }

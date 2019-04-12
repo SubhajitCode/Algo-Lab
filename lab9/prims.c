@@ -1,8 +1,8 @@
+//prims algorithm Heap imlementation
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
 #include<math.h>
-
 struct Node{
     int vertexNum;
     int weight;
@@ -162,6 +162,7 @@ void printTree(Edge edge[],int n)
 
 void print_heap(heapNode* heap[],int size)
 {
+    //debug features
     printf(" ----------heap start -------------\n");
 	int no_rows=log(size)/log(2)+1;
 	int i,j,k=1,l=0,m;
@@ -192,14 +193,6 @@ void print_heap(heapNode* heap[],int size)
      printf(" ----------heap end -------------\n");
 }
 
-void printArray(int arr[],int n)
-{
-    int i;
-    for(i=0;i<n;i++)
-    {
-        printf("%d  --%d\n",arr[i],i);
-    }
-}
 void primMST(node* vertex[],int n )
 {
     Edge tree[n];
@@ -256,7 +249,7 @@ int main()
     {
         vertices[i]=newNode(i,0);//vertex Initialization
     }
-    createEdge(vertices,0,4,1);
+    createEdge(vertices,0,4,1);//adding eache edge
     createEdge(vertices,0,8,7);
     createEdge(vertices,1,8,2);
     createEdge(vertices,1,11,7);
